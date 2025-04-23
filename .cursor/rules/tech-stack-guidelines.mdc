@@ -1,0 +1,173 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Tech Stack Guidelines and Best Practices
+
+This rule governs the technical implementation of [README.md](mdc:README.md) tech stack choices and enforces best practices for keeping the codebase simple and maintainable.
+
+## Core Technologies
+
+### Next.js
+- Use App Router for modern Next.js features
+- Keep pages and components in appropriate directories
+- Follow Next.js file-system based routing
+- Minimize use of client-side JavaScript where possible
+- Use server components by default, only use client components when necessary
+
+### TypeScript
+- Enable strict mode
+- Create type definitions for all shared interfaces
+- Use type inference where possible instead of explicit types
+- Keep types simple and focused
+- Use meaningful interface/type names
+
+### Tailwind CSS
+- Use utility classes directly instead of creating custom CSS where possible
+- Follow mobile-first responsive design
+- Maintain consistent spacing and color schemes
+- Use Tailwind's built-in animations before Framer Motion
+- Keep custom theme extensions minimal
+
+### State Management
+- Use React Query for server state
+- Rely on URL parameters for wizard state when possible
+- Avoid complex client-side state management
+- Keep state close to where it's used
+
+## API Integration
+
+### OpenAI API
+- Use streaming responses when possible
+- Implement proper error handling and rate limiting
+- Keep prompts simple and focused
+- Cache responses where appropriate
+- Use environment variables for API keys
+
+### Amazon Associates API
+- Implement proper error handling
+- Cache product data where possible
+- Use environment variables for credentials
+- Follow Amazon's terms of service
+
+## Performance Guidelines
+
+1. Bundle Size
+   - Use dynamic imports for large dependencies
+   - Implement proper code splitting
+   - Monitor bundle size with Next.js analytics
+
+2. Loading States
+   - Use Next.js Suspense boundaries
+   - Implement skeleton loading states
+   - Show progress indicators for long operations
+
+3. Caching
+   - Use Next.js built-in caching where possible
+   - Implement proper cache invalidation
+   - Cache API responses appropriately
+
+## Code Organization
+
+1. Directory Structure
+   ```
+   app/
+   ├── components/
+   │   ├── wizard/
+   │   ├── product/
+   │   └── shared/
+   ├── lib/
+   │   ├── api/
+   │   └── utils/
+   ├── types/
+   └── pages/
+   ```
+
+2. Component Guidelines
+   - One component per file
+   - Keep components focused and simple
+   - Use composition over inheritance
+   - Implement proper error boundaries
+
+3. API Routes
+   - Organize by feature
+   - Implement proper validation
+   - Use appropriate HTTP methods
+   - Handle errors consistently
+
+## Simplicity Principles
+
+1. Code
+   - Write self-documenting code
+   - Keep functions small and focused
+   - Use meaningful variable names
+   - Avoid premature optimization
+
+2. Dependencies
+   - Only add necessary dependencies
+   - Use built-in browser APIs when possible
+   - Prefer smaller, focused packages
+   - Regular dependency audits
+
+3. Features
+   - Implement MVP features first
+   - Avoid feature creep
+   - Focus on core user experience
+   - Remove unused features
+
+## Testing Guidelines
+
+1. Unit Tests
+   - Test business logic
+   - Keep tests simple and focused
+   - Use meaningful test descriptions
+   - Follow AAA pattern (Arrange, Act, Assert)
+
+2. Integration Tests
+   - Focus on critical user flows
+   - Test API integrations
+   - Verify wizard state management
+   - Test error scenarios
+
+## Error Handling
+
+1. User Errors
+   - Provide clear error messages
+   - Guide users to resolution
+   - Maintain wizard state during errors
+   - Allow retry operations
+
+2. API Errors
+   - Implement proper fallbacks
+   - Log errors appropriately
+   - Maintain data consistency
+   - Provide graceful degradation
+
+## Documentation
+
+1. Code Comments
+   - Document complex logic
+   - Explain business rules
+   - Document API interfaces
+   - Keep comments up to date
+
+2. Type Definitions
+   - Document complex types
+   - Include examples
+   - Keep interfaces focused
+   - Use descriptive names
+
+## Security
+
+1. API Keys
+   - Use environment variables
+   - Implement proper validation
+   - Never expose in client
+   - Regular key rotation
+
+2. User Input
+   - Validate all inputs
+   - Sanitize data
+   - Prevent injection attacks
+   - Rate limit requests

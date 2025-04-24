@@ -10,6 +10,13 @@ interface ProductRecommendation {
   amazonUrl: string;
 }
 
+interface PageProps {
+  params: {
+    permalink: string;
+  };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
 export const revalidate = 3600; // Revalidate every hour
 
 async function getResult(permalink: string) {
@@ -24,11 +31,7 @@ async function getResult(permalink: string) {
   return result;
 }
 
-export default async function ResultsPage({
-  params,
-}: {
-  params: { permalink: string };
-}) {
+export default async function ResultsPage({ params }: PageProps) {
   const result = await getResult(params.permalink);
 
   return (

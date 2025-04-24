@@ -17,9 +17,7 @@ export default function Home() {
             Help Me Pick
           </h1>
           <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Get personalized product recommendations through an{' '}
-            <span className="text-black dark:text-white font-bold">interactive experience</span>{' '}
-            powered by AI.
+            Get personalized product recommendations!
           </p>
         </motion.div>
       </header>

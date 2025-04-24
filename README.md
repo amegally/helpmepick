@@ -74,17 +74,22 @@ Help Me Pick simplifies the product selection process through a guided wizard in
 ### Phase 7: Testing and Optimization 🧪
 - [x] Implement API rate limiting
 - [x] Optimize API calls and prevent unnecessary refreshes
-- [ ] Write unit tests for core functionality
-- [ ] Perform end-to-end testing
-- [ ] Test cross-browser compatibility
-- [ ] Implement SEO optimizations
+
 
 ### Phase 8: Deployment and Launch 🚀
 - [ ] Set up Vercel deployment
 - [ ] Configure production environment variables
-- [ ] Implement monitoring and logging
 - [ ] Perform security audit
 - [ ] Launch MVP
+
+
+### For later
+- [ ] Implement monitoring and logging
+- [ ] Implement SEO optimizations
+- [ ] Write unit tests for core functionality
+- [ ] Perform end-to-end testing
+- [ ] Test cross-browser compatibility
+
 
 ## User Flow
 

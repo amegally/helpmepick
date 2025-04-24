@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { nanoid } from 'nanoid';
 
 // Ensure Prisma is initialized
-let prismaInstance = prisma;
+const prismaInstance = prisma;
 
 // POST /api/wizard/results - Save wizard results
 export async function POST(request: Request) {

@@ -1,17 +1,27 @@
 'use client';
 
 import { Wizard } from './components/wizard/Wizard';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   return (
-    <div className="space-y-8">
-      <header className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Help Me Pick
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Get personalized product recommendations through an interactive experience powered by AI.
-        </p>
+    <div className="space-y-20">
+      <header className="text-center space-y-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-8"
+        >
+          <h1 className="text-6xl sm:text-7xl md:text-8xl font-extrabold tracking-tighter">
+            Help Me Pick
+          </h1>
+          <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Get personalized product recommendations through an{' '}
+            <span className="text-black dark:text-white font-bold">interactive experience</span>{' '}
+            powered by AI.
+          </p>
+        </motion.div>
       </header>
       <Wizard />
     </div>

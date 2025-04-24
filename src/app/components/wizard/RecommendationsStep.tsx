@@ -10,7 +10,13 @@ export function RecommendationsStep() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isSubscribed = true; // For cleanup
+
     async function fetchRecommendations() {
+      if (!state.category || !state.criteria) {
+        return;
+      }
+
       try {
         const response = await fetch('/api/wizard/recommendations', {
           method: 'POST',
@@ -28,6 +34,8 @@ export function RecommendationsStep() {
         }
 
         const data = await response.json();
+        if (!isSubscribed) return;
+
         // Process recommendations to add affiliate links using search
         const processedRecommendations = data.recommendations.map((rec: ProductRecommendation) => ({
           ...rec,
@@ -36,14 +44,22 @@ export function RecommendationsStep() {
         setRecommendations(processedRecommendations);
       } catch (err) {
         console.error('Error fetching recommendations:', err);
-        setError('Failed to load recommendations. Please try again.');
+        if (isSubscribed) {
+          setError('Failed to load recommendations. Please try again.');
+        }
       } finally {
-        setLoading(false);
+        if (isSubscribed) {
+          setLoading(false);
+        }
       }
     }
 
     fetchRecommendations();
-  }, [state.category, state.criteria, setRecommendations]);
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [state.category, state.criteria]); // Removed setRecommendations from dependencies
 
   if (loading) {
     return (

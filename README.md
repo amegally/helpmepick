@@ -72,9 +72,10 @@ Help Me Pick simplifies the product selection process through a guided wizard in
 - [ ] Add analytics tracking
 
 ### Phase 7: Testing and Optimization 🧪
+- [x] Implement API rate limiting
+- [x] Optimize API calls and prevent unnecessary refreshes
 - [ ] Write unit tests for core functionality
 - [ ] Perform end-to-end testing
-- [ ] Optimize performance
 - [ ] Test cross-browser compatibility
 - [ ] Implement SEO optimizations
 
@@ -226,6 +227,27 @@ Required environment variables:
 - Added: Error handling for API calls
 - Added: Loading states for API requests
 - Changed: Mock data replaced with real API calls
+
+### v0.1.5 (2024-03-21)
+- Added: API rate limiting to prevent abuse
+- Fixed: Unnecessary API refreshes in wizard steps
+- Added: Better error handling for rate limits
+- Added: Request cleanup for memory management
+- Changed: Optimized state management in wizard components
+
+## API Rate Limits
+
+The application implements rate limiting to prevent abuse and ensure fair usage:
+
+- Question Generation: 10 requests per minute per IP
+- Recommendations: 10 requests per minute per IP
+
+Rate limit headers are included in API responses:
+- `X-RateLimit-Limit`: Maximum requests allowed
+- `X-RateLimit-Remaining`: Remaining requests in current window
+- `X-RateLimit-Reset`: Timestamp when the rate limit resets
+
+When rate limit is exceeded, the API returns a 429 status code with an error message.
 
 ## Contributing
 

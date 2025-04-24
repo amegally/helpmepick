@@ -34,8 +34,11 @@ function WizardContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white rounded-lg shadow-lg p-6"
+          transition={{ 
+            duration: 0.4,
+            ease: [0.4, 0, 0.2, 1]
+          }}
+          className="backdrop-blur-lg bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8"
         >
           {renderStep()}
         </motion.div>

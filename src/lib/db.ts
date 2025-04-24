@@ -1,13 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 
-declare global {
-  var prisma: PrismaClient | undefined;
-}
+// This is needed because in development we don't want to restart
+// the server with every change, but we want to make sure we don't
+// create a new connection to the DB with every change either.
+let prismaGlobal = global as typeof global & {
+  prisma?: PrismaClient;
+};
 
-const globalForPrisma = global as { prisma?: PrismaClient };
-
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+export const prisma = prismaGlobal.prisma || new PrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+  prismaGlobal.prisma = prisma;
 } 

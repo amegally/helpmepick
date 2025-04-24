@@ -30,6 +30,18 @@ Question:`;
   return response.choices[0]?.message?.content?.trim() || "What specific features or requirements are most important to you?";
 }
 
+interface OpenAIRecommendation {
+  name: string;
+  description: string;
+  explanation: string;
+  price: string;
+  rating: number;
+}
+
+interface OpenAIResponse {
+  recommendations: OpenAIRecommendation[];
+}
+
 export async function generateRecommendations(
   category: string,
   criteria: string
@@ -70,9 +82,9 @@ Ensure prices are realistic and include the $ symbol. Ratings should be between 
 
   try {
     const content = response.choices[0]?.message?.content || "{}";
-    const data = JSON.parse(content);
+    const data = JSON.parse(content) as OpenAIResponse;
     // Generate Amazon URLs for each recommendation
-    return (data.recommendations || []).map((rec: any) => ({
+    return (data.recommendations || []).map((rec: OpenAIRecommendation) => ({
       ...rec,
       amazonUrl: generateAmazonAffiliateUrl(rec.name)
     }));

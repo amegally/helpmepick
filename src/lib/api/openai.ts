@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { ProductRecommendation } from '@/types/wizard';
+import { generateAmazonAffiliateUrl } from './amazon';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -46,14 +47,12 @@ Provide 5 recommendations in the following JSON format:
       "description": "Brief product description",
       "explanation": "Why this matches the user's needs",
       "price": "Estimated price",
-      "rating": Estimated rating (1-5),
-      "amazonUrl": "https://www.amazon.com/s?k=Product+Name+Exact+Model"
+      "rating": Estimated rating (1-5)
     }
   ]
 }
 
-Important: For the amazonUrl field, always use the format "https://www.amazon.com/s?k=Product+Name+Exact+Model" where "Product+Name+Exact+Model" is the exact product name with spaces replaced by plus signs. Do not use any other URL format.
-
+Important: Do not include amazonUrl in the response, it will be generated separately.
 Ensure prices are realistic and include the $ symbol. Ratings should be between 1-5.`;
 
   const response = await openai.chat.completions.create({
@@ -72,7 +71,11 @@ Ensure prices are realistic and include the $ symbol. Ratings should be between 
   try {
     const content = response.choices[0]?.message?.content || "{}";
     const data = JSON.parse(content);
-    return data.recommendations || [];
+    // Generate Amazon URLs for each recommendation
+    return (data.recommendations || []).map((rec: any) => ({
+      ...rec,
+      amazonUrl: generateAmazonAffiliateUrl(rec.name)
+    }));
   } catch (error) {
     console.error('Error parsing OpenAI response:', error);
     return [];

@@ -7,9 +7,6 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
-  experimental: {
-    clientInstrumentationHook: true,
-  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.externals = [...(config.externals || []), '@prisma/client'];

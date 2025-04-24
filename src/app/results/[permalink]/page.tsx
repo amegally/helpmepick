@@ -1,5 +1,14 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
+import Link from 'next/link';
+
+interface ProductRecommendation {
+  name: string;
+  description: string;
+  explanation: string;
+  price: string;
+  amazonUrl: string;
+}
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -46,7 +55,7 @@ export default async function ResultsPage({
           <div>
             <h2 className="text-lg font-semibold mb-4">Recommendations</h2>
             <div className="grid gap-4">
-              {(result.recommendations as any[]).map((product, index) => (
+              {(result.recommendations as ProductRecommendation[]).map((product, index) => (
                 <div
                   key={index}
                   className="border rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -72,12 +81,12 @@ export default async function ResultsPage({
         </div>
 
         <div className="bg-gray-50 px-6 py-4">
-          <a
+          <Link
             href="/"
             className="text-blue-600 hover:text-blue-800 font-medium"
           >
             ← Create Your Own Recommendations
-          </a>
+          </Link>
         </div>
       </div>
     </div>

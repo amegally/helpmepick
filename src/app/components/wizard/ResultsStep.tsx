@@ -58,7 +58,7 @@ export function ResultsStep() {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          All set! Here's your summary
+          All set! Here&apos;s your summary
         </h2>
         <p className="text-gray-600">
           You can share these recommendations or start a new search.

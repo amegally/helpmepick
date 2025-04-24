@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useWizard } from './WizardContext';
-import { motion } from 'framer-motion';
 
 export function CriteriaStep() {
   const { state, setCriteria, setRecommendations, nextStep, previousStep } = useWizard();
@@ -84,7 +83,7 @@ export function CriteriaStep() {
             Analyzing your request...
           </h2>
           <p className="text-gray-600">
-            We're preparing a follow-up question to better understand your needs.
+            We&apos;re preparing a follow-up question to better understand your needs.
           </p>
         </div>
         <div className="flex justify-center">
@@ -119,7 +118,7 @@ export function CriteriaStep() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          Let's get more specific
+          Let&apos;s get more specific
         </h2>
         <p className="text-gray-600">
           {question}

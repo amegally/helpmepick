@@ -3,11 +3,9 @@
 import React, { useState } from 'react';
 import { useWizard } from './WizardContext';
 import { motion } from 'framer-motion';
-import { ProductRecommendation } from '@/types/wizard';
-import { generateAmazonAffiliateUrl } from '@/lib/api/amazon';
 
 export function RecommendationsStep() {
-  const { state, setRecommendations, nextStep, previousStep } = useWizard();
+  const { state, previousStep } = useWizard();
   const [copied, setCopied] = useState(false);
   const [permalink, setPermalink] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);

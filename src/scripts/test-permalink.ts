@@ -1,5 +1,14 @@
 import { prisma } from '../lib/db';
 
+interface ProductRecommendation {
+  name: string;
+  description: string;
+  explanation: string;
+  price: string;
+  rating: number;
+  amazonUrl: string;
+}
+
 async function testPermalink() {
   try {
     // 1. Create a test wizard result
@@ -23,7 +32,7 @@ async function testPermalink() {
           rating: 4.7,
           amazonUrl: "https://amazon.com/sample2"
         }
-      ],
+      ] as ProductRecommendation[],
       permalink: "test-gaming-laptop"
     };
 
@@ -48,8 +57,8 @@ async function testPermalink() {
       category: retrieved?.category === testData.category,
       criteria: retrieved?.criteria === testData.criteria,
       recommendationsLength: retrieved?.recommendations && 
-        Array.isArray((retrieved.recommendations as any)) && 
-        (retrieved.recommendations as any[]).length === testData.recommendations.length,
+        Array.isArray(retrieved.recommendations) && 
+        (retrieved.recommendations as ProductRecommendation[]).length === testData.recommendations.length,
       permalink: retrieved?.permalink === testData.permalink
     };
 

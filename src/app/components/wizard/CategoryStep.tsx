@@ -9,7 +9,7 @@ const exampleCategories = [
 ];
 
 export function CategoryStep() {
-  const { state, setCategory, nextStep } = useWizard();
+  const { setCategory, nextStep } = useWizard();
   const [customCategory, setCustomCategory] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,7 +33,7 @@ export function CategoryStep() {
           What do you want help picking?
         </h2>
         <p className="text-gray-600">
-          Tell us what you're looking for or choose from our examples below
+          Tell us what you&apos;re looking for or choose from our examples below
         </p>
       </div>
 

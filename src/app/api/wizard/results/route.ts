@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { nanoid } from 'nanoid';
 
+// Ensure Prisma is initialized
+let prismaInstance = prisma;
+
 // POST /api/wizard/results - Save wizard results
 export async function POST(request: Request) {
   try {
@@ -18,7 +21,7 @@ export async function POST(request: Request) {
     const permalink = nanoid(10); // 10 character unique ID
 
     // Save the wizard result
-    const result = await prisma.wizardResult.create({
+    const result = await prismaInstance.wizardResult.create({
       data: {
         category,
         criteria,
@@ -53,7 +56,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const result = await prisma.wizardResult.findUnique({
+    const result = await prismaInstance.wizardResult.findUnique({
       where: { permalink },
     });
 

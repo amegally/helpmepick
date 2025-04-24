@@ -11,8 +11,15 @@ interface ProductRecommendation {
   amazonUrl: string;
 }
 
+interface PageProps {
+  params: {
+    permalink: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 // Define metadata for SEO
-export async function generateMetadata({ params }: { params: { permalink: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const result = await getResult(params.permalink);
   return {
     title: `Product Recommendations - ${result.category}`,
@@ -41,9 +48,8 @@ async function getResult(permalink: string) {
 
 export default async function ResultsPage({
   params,
-}: {
-  params: { permalink: string };
-}) {
+  searchParams,
+}: PageProps) {
   const result = await getResult(params.permalink);
 
   return (

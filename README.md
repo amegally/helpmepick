@@ -134,20 +134,62 @@ Then add your API keys to `.env.local`:
 ```
 OPENAI_API_KEY=your_key_here
 AMAZON_AFFILIATE_ID=your_id_here
+DATABASE_URL=your_database_url_here
 ```
 
-4. Run the development server
+4. Set up the database
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Push the database schema
+npx prisma db push
+```
+
+5. Run the development server
 ```bash
 npm run dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Environment Variables
 
 Required environment variables:
 - `OPENAI_API_KEY` - Your OpenAI API key
 - `AMAZON_AFFILIATE_ID` - Your Amazon Associates ID
+- `DATABASE_URL` - Your PostgreSQL database URL
+
+## TypeScript Configuration
+
+The project uses strict TypeScript configuration with the following key settings:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  }
+}
+```
+
+Key TypeScript practices:
+- Use `let` instead of `var` for global declarations
+- Place global type declarations in `.d.ts` files
+- Follow singleton pattern for database client
+- Use proper type annotations for API responses
 
 ## Development Notes
 

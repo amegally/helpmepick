@@ -22,6 +22,11 @@ This rule governs the technical implementation of [README.md](mdc:README.md) tec
 - Use type inference where possible instead of explicit types
 - Keep types simple and focused
 - Use meaningful interface/type names
+- For global declarations:
+  - Use `let` instead of `var` in global scope declarations
+  - Place global type declarations in dedicated `.d.ts` files when possible
+  - Document global declarations with clear comments
+  - Minimize use of global declarations, prefer module-scoped variables
 
 ### Tailwind CSS
 - Use utility classes directly instead of creating custom CSS where possible
@@ -171,3 +176,12 @@ This rule governs the technical implementation of [README.md](mdc:README.md) tec
    - Sanitize data
    - Prevent injection attacks
    - Rate limit requests
+
+### Database Integration
+- Use Prisma as the primary ORM
+- Follow these Prisma best practices:
+  - Generate Prisma client during both postinstall and build
+  - Use singleton pattern for PrismaClient instantiation
+  - Properly type global PrismaClient instance
+  - Handle database connection lifecycle appropriately
+  - Use proper error handling for database operations

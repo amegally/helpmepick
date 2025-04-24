@@ -1,14 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 
-declare global {
-  let prisma: PrismaClient | undefined;
+let prisma: PrismaClient;
+
+if (process.env.NODE_ENV === 'production') {
+  prisma = new PrismaClient();
+} else {
+  // In development, use a global variable to prevent multiple instances
+  if (!(global as any).prisma) {
+    (global as any).prisma = new PrismaClient();
+  }
+  prisma = (global as any).prisma;
 }
 
-export const prisma = global.prisma || new PrismaClient();
-
-if (process.env.NODE_ENV !== 'production') {
-  global.prisma = prisma;
-}
+export { prisma };
 
 export function getPrismaClient() {
   return prisma;

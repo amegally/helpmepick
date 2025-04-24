@@ -10,12 +10,10 @@ interface ProductRecommendation {
   amazonUrl: string;
 }
 
-interface PageProps {
-  params: {
-    permalink: string;
-  };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
+type PageProps = {
+  params: { permalink: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export const revalidate = 3600; // Revalidate every hour
 
@@ -31,8 +29,8 @@ async function getResult(permalink: string) {
   return result;
 }
 
-export default async function ResultsPage({ params }: PageProps) {
-  const result = await getResult(params.permalink);
+export default async function ResultsPage(props: PageProps) {
+  const result = await getResult(props.params.permalink);
 
   return (
     <div className="max-w-4xl mx-auto p-6">

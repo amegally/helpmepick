@@ -47,10 +47,12 @@ Provide 5 recommendations in the following JSON format:
       "explanation": "Why this matches the user's needs",
       "price": "Estimated price",
       "rating": Estimated rating (1-5),
-      "amazonUrl": "amazon.com/search?q=product+name"
+      "amazonUrl": "https://www.amazon.com/s?k=Product+Name+Exact+Model"
     }
   ]
 }
+
+Important: For the amazonUrl field, always use the format "https://www.amazon.com/s?k=Product+Name+Exact+Model" where "Product+Name+Exact+Model" is the exact product name with spaces replaced by plus signs. Do not use any other URL format.
 
 Ensure prices are realistic and include the $ symbol. Ratings should be between 1-5.`;
 

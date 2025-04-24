@@ -9,6 +9,12 @@ export function generateAmazonAffiliateUrl(productName: string, url?: string): s
     try {
       const urlObj = new URL(fullUrl);
       if (urlObj.hostname.includes('amazon')) {
+        // For search URLs, ensure we don't duplicate the tag parameter
+        if (urlObj.pathname === '/s' && urlObj.searchParams.has('k')) {
+          urlObj.searchParams.set('tag', affiliateId || '');
+          return urlObj.toString();
+        }
+        // For other Amazon URLs, append the tag parameter
         return `${fullUrl}${fullUrl.includes('?') ? '&' : '?'}tag=${affiliateId}`;
       }
       return fullUrl;
@@ -29,12 +35,18 @@ export function generateAmazonProductUrl(productUrl: string): string {
     // Ensure URL has https:// prefix
     const fullUrl = productUrl.startsWith('http') ? productUrl : `https://${productUrl}`;
     const url = new URL(fullUrl);
+    
     if (url.hostname.includes('amazon.com')) {
-      url.searchParams.set('tag', AMAZON_AFFILIATE_ID);
-      return url.toString();
+      // For search URLs, ensure we don't duplicate the tag parameter
+      if (url.pathname === '/s' && url.searchParams.has('k')) {
+        url.searchParams.set('tag', AMAZON_AFFILIATE_ID);
+        return url.toString();
+      }
+      // For other Amazon URLs, append the tag parameter
+      return `${fullUrl}${fullUrl.includes('?') ? '&' : '?'}tag=${AMAZON_AFFILIATE_ID}`;
     }
     
-    // If it's just a search term, generate a search URL
+    // If it's not an Amazon URL, treat it as a search term
     return generateAmazonAffiliateUrl(productUrl);
   } catch {
     // If URL parsing fails, treat it as a search term

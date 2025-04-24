@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WizardResult {
+  id              String          @id @default(cuid())
+  createdAt       DateTime        @default(now())
+  category        String
+  criteria        String
+  recommendations Json            // Store the recommendations array as JSON
+  permalink       String          @unique // The unique URL-friendly identifier
+  permalinkIndex  PermalinkIndex?
+}
+
+// Index for faster permalink lookups
+model PermalinkIndex {
+  permalink String      @id
+  resultId  String     @unique
+  result    WizardResult @relation(fields: [resultId], references: [id])
+}

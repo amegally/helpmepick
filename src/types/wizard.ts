@@ -11,10 +11,9 @@ export interface ProductRecommendation {
   name: string;
   description: string;
   explanation: string;
+  price: string;
+  rating: number;
   amazonUrl: string;
-  price?: string;
-  rating?: number;
-  imageUrl?: string;
 }
 
 export interface WizardContextType {
@@ -25,4 +24,4 @@ export interface WizardContextType {
   nextStep: () => void;
   previousStep: () => void;
   reset: () => void;
-} 
+}

@@ -1,5 +1,17 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { WizardState, WizardContextType, ProductRecommendation } from '@/types/wizard';
+'use client';
+
+import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import { WizardState, ProductRecommendation, WizardStep } from '@/types/wizard';
+
+interface WizardContextType {
+  state: WizardState;
+  setCategory: (category: string) => void;
+  setCriteria: (criteria: string) => void;
+  setRecommendations: (recommendations: ProductRecommendation[]) => void;
+  nextStep: () => void;
+  previousStep: () => void;
+  reset: () => void;
+}
 
 const initialState: WizardState = {
   currentStep: 'category',
@@ -26,27 +38,21 @@ export function WizardProvider({ children }: { children: ReactNode }) {
   };
 
   const nextStep = () => {
-    const steps: Record<string, string> = {
-      'category': 'criteria',
-      'criteria': 'recommendations',
-      'recommendations': 'results',
-    };
-    setState(prev => ({
-      ...prev,
-      currentStep: steps[prev.currentStep] as WizardState['currentStep'] || prev.currentStep,
-    }));
+    setState(prev => {
+      const steps: WizardStep[] = ['category', 'criteria', 'recommendations', 'results'];
+      const currentIndex = steps.indexOf(prev.currentStep);
+      const nextStep = steps[currentIndex + 1] || prev.currentStep;
+      return { ...prev, currentStep: nextStep };
+    });
   };
 
   const previousStep = () => {
-    const steps: Record<string, string> = {
-      'criteria': 'category',
-      'recommendations': 'criteria',
-      'results': 'recommendations',
-    };
-    setState(prev => ({
-      ...prev,
-      currentStep: steps[prev.currentStep] as WizardState['currentStep'] || prev.currentStep,
-    }));
+    setState(prev => {
+      const steps: WizardStep[] = ['category', 'criteria', 'recommendations', 'results'];
+      const currentIndex = steps.indexOf(prev.currentStep);
+      const prevStep = steps[currentIndex - 1] || prev.currentStep;
+      return { ...prev, currentStep: prevStep };
+    });
   };
 
   const reset = () => {

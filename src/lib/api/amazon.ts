@@ -1,17 +1,20 @@
-const AMAZON_AFFILIATE_ID = process.env.AMAZON_AFFILIATE_ID || '';
+const AMAZON_AFFILIATE_ID = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID || '';
 
-export function generateAmazonAffiliateUrl(productName: string): string {
-  // Clean and encode the product name for the URL
-  const searchQuery = encodeURIComponent(productName.trim());
-  
-  // Create the Amazon search URL with affiliate tag
-  const baseUrl = 'https://www.amazon.com/s';
-  const params = new URLSearchParams({
-    k: searchQuery,
-    tag: AMAZON_AFFILIATE_ID,
-  });
+export function generateAmazonAffiliateUrl(productName: string, url?: string): string {
+  const affiliateId = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID;
 
-  return `${baseUrl}?${params.toString()}`;
+  if (url) {
+    // If a direct Amazon URL is provided, append the affiliate ID
+    const urlObj = new URL(url);
+    if (urlObj.hostname.includes('amazon')) {
+      return `${url}${url.includes('?') ? '&' : '?'}tag=${affiliateId}`;
+    }
+    return url;
+  }
+
+  // If no URL is provided, create a search URL with the product name
+  const searchQuery = encodeURIComponent(productName);
+  return `https://www.amazon.com/s?k=${searchQuery}&tag=${affiliateId}`;
 }
 
 export function generateAmazonProductUrl(productUrl: string): string {

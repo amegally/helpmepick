@@ -5,13 +5,48 @@ import { motion } from 'framer-motion';
 export function ResultsStep() {
   const { state, reset } = useWizard();
   const [copied, setCopied] = useState(false);
+  const [permalink, setPermalink] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
-  const handleCopyLink = async () => {
-    // In a real implementation, this would be a proper permalink
-    const shareUrl = `${window.location.origin}?category=${encodeURIComponent(state.category)}&criteria=${encodeURIComponent(state.criteria)}`;
-    
+  const handleSaveAndCopyLink = async () => {
+    if (permalink) {
+      // If we already have a permalink, just copy it
+      await copyToClipboard(`${window.location.origin}/results/${permalink}`);
+      return;
+    }
+
+    setSaving(true);
     try {
-      await navigator.clipboard.writeText(shareUrl);
+      const response = await fetch('/api/wizard/results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category: state.category,
+          criteria: state.criteria,
+          recommendations: state.recommendations,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save results');
+      }
+
+      const { permalink: newPermalink } = await response.json();
+      setPermalink(newPermalink);
+      await copyToClipboard(`${window.location.origin}/results/${newPermalink}`);
+    } catch (err) {
+      console.error('Error saving results:', err);
+      // Show error message to user
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -53,10 +88,19 @@ export function ResultsStep() {
 
       <div className="flex gap-3">
         <button
-          onClick={handleCopyLink}
-          className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium relative"
+          onClick={handleSaveAndCopyLink}
+          disabled={saving}
+          className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium relative disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {copied ? (
+          {saving ? (
+            <span className="flex items-center justify-center">
+              <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+              Saving...
+            </span>
+          ) : copied ? (
             <motion.span
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}

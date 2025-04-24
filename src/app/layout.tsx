@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { WizardProvider } from "./components/wizard/WizardContext";
+import { DebugEnv } from './components/DebugEnv';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
         <div className="relative">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <main className="max-w-4xl mx-auto">
+              <DebugEnv />
               <WizardProvider>
                 {children}
               </WizardProvider>

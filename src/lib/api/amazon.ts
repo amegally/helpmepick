@@ -1,20 +1,26 @@
 // Debug logging for environment variables
-console.log('Environment variables check:', {
+console.log('Amazon URL Generation Environment Check:', {
   NEXT_PUBLIC_AMAZON_AFFILIATE_ID: process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID,
+  AMAZON_AFFILIATE_ID: process.env.AMAZON_AFFILIATE_ID,
   NODE_ENV: process.env.NODE_ENV
 });
 
-const AMAZON_AFFILIATE_ID = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID;
-if (!AMAZON_AFFILIATE_ID) {
-  console.warn('Warning: NEXT_PUBLIC_AMAZON_AFFILIATE_ID is not set');
-}
+// Try both environment variables, with a fallback
+const AMAZON_AFFILIATE_ID = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID || process.env.AMAZON_AFFILIATE_ID || 'helpmepick09-20';
+
+console.log('Using affiliate ID:', AMAZON_AFFILIATE_ID);
 
 export function generateAmazonAffiliateUrl(productName: string, url?: string): string {
-  // Debug log the inputs
-  console.log('generateAmazonAffiliateUrl inputs:', { productName, url, AMAZON_AFFILIATE_ID });
+  // Debug log the inputs and final affiliate ID being used
+  console.log('generateAmazonAffiliateUrl called with:', {
+    productName,
+    url,
+    AMAZON_AFFILIATE_ID,
+    env: process.env.NODE_ENV
+  });
 
   if (!AMAZON_AFFILIATE_ID) {
-    console.warn('Warning: NEXT_PUBLIC_AMAZON_AFFILIATE_ID is not set when generating affiliate URL');
+    console.warn('Warning: No affiliate ID available');
   }
 
   if (url) {
@@ -28,7 +34,7 @@ export function generateAmazonAffiliateUrl(productName: string, url?: string): s
         // Remove any existing tag parameter
         finalUrl.searchParams.delete('tag');
         // Add our affiliate tag
-        finalUrl.searchParams.append('tag', AMAZON_AFFILIATE_ID || '');
+        finalUrl.searchParams.append('tag', AMAZON_AFFILIATE_ID);
         const result = finalUrl.toString();
         console.log('Generated Amazon URL:', result);
         return result;

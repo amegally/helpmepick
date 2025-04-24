@@ -15,7 +15,6 @@ interface PageProps {
   params: {
     permalink: string;
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 // Define metadata for SEO
@@ -48,8 +47,9 @@ async function getResult(permalink: string) {
 
 export default async function ResultsPage({
   params,
-  searchParams,
-}: PageProps) {
+}: {
+  params: { permalink: string };
+}) {
   const result = await getResult(params.permalink);
 
   return (

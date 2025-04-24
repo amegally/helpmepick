@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
 interface ProductRecommendation {
   name: string;
@@ -10,27 +11,40 @@ interface ProductRecommendation {
   amazonUrl: string;
 }
 
-type PageProps = {
-  params: { permalink: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+// Define metadata for SEO
+export async function generateMetadata({ params }: { params: { permalink: string } }): Promise<Metadata> {
+  const result = await getResult(params.permalink);
+  return {
+    title: `Product Recommendations - ${result.category}`,
+    description: `Personalized product recommendations for ${result.category} based on your criteria.`,
+  };
+}
 
 export const revalidate = 3600; // Revalidate every hour
 
 async function getResult(permalink: string) {
-  const result = await prisma.wizardResult.findUnique({
-    where: { permalink },
-  });
+  try {
+    const result = await prisma.wizardResult.findUnique({
+      where: { permalink },
+    });
 
-  if (!result) {
+    if (!result) {
+      notFound();
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error fetching result:', error);
     notFound();
   }
-
-  return result;
 }
 
-export default async function ResultsPage(props: PageProps) {
-  const result = await getResult(props.params.permalink);
+export default async function ResultsPage({
+  params,
+}: {
+  params: { permalink: string };
+}) {
+  const result = await getResult(params.permalink);
 
   return (
     <div className="max-w-4xl mx-auto p-6">

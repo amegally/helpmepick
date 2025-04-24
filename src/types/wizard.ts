@@ -1,7 +1,7 @@
 export type WizardStep = 'category' | 'criteria' | 'recommendations' | 'results';
 
 export interface WizardState {
-  currentStep: WizardStep;
+  step: number;
   category: string;
   criteria: string;
   recommendations: ProductRecommendation[];
@@ -14,6 +14,15 @@ export interface ProductRecommendation {
   price: string;
   rating: number;
   amazonUrl: string;
+}
+
+export interface WizardResult {
+  id: string;
+  createdAt: Date;
+  category: string;
+  criteria: string;
+  recommendations: ProductRecommendation[];
+  permalink: string;
 }
 
 export interface WizardContextType {

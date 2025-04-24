@@ -4,12 +4,19 @@ export function generateAmazonAffiliateUrl(productName: string, url?: string): s
   const affiliateId = process.env.NEXT_PUBLIC_AMAZON_AFFILIATE_ID;
 
   if (url) {
-    // If a direct Amazon URL is provided, append the affiliate ID
-    const urlObj = new URL(url);
-    if (urlObj.hostname.includes('amazon')) {
-      return `${url}${url.includes('?') ? '&' : '?'}tag=${affiliateId}`;
+    // If a direct Amazon URL is provided, ensure it has https:// and append the affiliate ID
+    const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+    try {
+      const urlObj = new URL(fullUrl);
+      if (urlObj.hostname.includes('amazon')) {
+        return `${fullUrl}${fullUrl.includes('?') ? '&' : '?'}tag=${affiliateId}`;
+      }
+      return fullUrl;
+    } catch {
+      // If URL parsing fails, treat as a search term
+      const searchQuery = encodeURIComponent(url);
+      return `https://www.amazon.com/s?k=${searchQuery}&tag=${affiliateId}`;
     }
-    return url;
   }
 
   // If no URL is provided, create a search URL with the product name
@@ -19,8 +26,9 @@ export function generateAmazonAffiliateUrl(productName: string, url?: string): s
 
 export function generateAmazonProductUrl(productUrl: string): string {
   try {
-    // If it's already a full URL, add the affiliate tag
-    const url = new URL(productUrl);
+    // Ensure URL has https:// prefix
+    const fullUrl = productUrl.startsWith('http') ? productUrl : `https://${productUrl}`;
+    const url = new URL(fullUrl);
     if (url.hostname.includes('amazon.com')) {
       url.searchParams.set('tag', AMAZON_AFFILIATE_ID);
       return url.toString();

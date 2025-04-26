@@ -4,6 +4,52 @@ import React, { useState } from 'react';
 import { useWizard } from './WizardContext';
 import { motion } from 'framer-motion';
 
+// Star Rating Component
+const StarRating = ({ rating }: { rating: number }) => {
+  const totalStars = 5;
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+
+  return (
+    <div className="flex items-center">
+      {[...Array(totalStars)].map((_, index) => {
+        if (index < fullStars) {
+          // Full star
+          return (
+            <svg key={index} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          );
+        } else if (index === fullStars && hasHalfStar) {
+          // Half star
+          return (
+            <div key={index} className="relative w-4 h-4">
+              {/* Empty star background */}
+              <svg className="absolute w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              {/* Half star overlay */}
+              <div className="absolute w-2 h-4 overflow-hidden">
+                <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+            </div>
+          );
+        } else {
+          // Empty star
+          return (
+            <svg key={index} className="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          );
+        }
+      })}
+      <span className="ml-1 text-sm text-gray-500">({rating})</span>
+    </div>
+  );
+};
+
 export function RecommendationsStep() {
   const { state, previousStep } = useWizard();
   const [copied, setCopied] = useState(false);
@@ -12,7 +58,6 @@ export function RecommendationsStep() {
 
   const handleSaveAndCopyLink = async () => {
     if (permalink) {
-      // If we already have a permalink, just copy it
       await copyToClipboard(`${window.location.origin}/results/${permalink}`);
       return;
     }
@@ -40,7 +85,6 @@ export function RecommendationsStep() {
       await copyToClipboard(`${window.location.origin}/results/${newPermalink}`);
     } catch (err) {
       console.error('Error saving results:', err);
-      // Show error message to user
     } finally {
       setSaving(false);
     }
@@ -76,8 +120,28 @@ export function RecommendationsStep() {
             transition={{ delay: index * 0.1 }}
             className="bg-white rounded-lg shadow-md p-6"
           >
-            <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="text-xl font-semibold">{product.name}</h3>
+              <StarRating rating={product.rating} />
+            </div>
             <p className="text-gray-600 mb-4">{product.description}</p>
+            
+            {/* Personal Note Sticky */}
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-r-lg shadow-sm">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-yellow-700">
+                    {product.personalNote}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between">
               <span className="text-2xl font-bold text-gray-900">{product.price}</span>
               <a
@@ -93,37 +157,19 @@ export function RecommendationsStep() {
         ))}
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex justify-center space-x-4 mt-8">
+        <button
+          onClick={previousStep}
+          className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+        >
+          ← Back
+        </button>
         <button
           onClick={handleSaveAndCopyLink}
           disabled={saving}
-          className="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium relative disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
         >
-          {saving ? (
-            <span className="flex items-center justify-center">
-              <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Saving...
-            </span>
-          ) : copied ? (
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-            >
-              Copied!
-            </motion.span>
-          ) : (
-            'Copy Share Link'
-          )}
-        </button>
-        <button
-          onClick={previousStep}
-          className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-        >
-          Back
+          {saving ? 'Saving...' : copied ? 'Copied!' : 'Share Results'}
         </button>
       </div>
     </div>

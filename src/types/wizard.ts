@@ -14,6 +14,7 @@ export interface ProductRecommendation {
   price: string;
   rating: number;
   amazonUrl: string;
+  personalNote: string;
 }
 
 export interface WizardResult {

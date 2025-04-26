@@ -117,10 +117,8 @@ export function CriteriaStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          Let&apos;s get more specific
-        </h2>
-        <p className="text-gray-600">
+     
+        <p className="text-gray-900 font-semibold">
           {question}
         </p>
       </div>
@@ -134,7 +132,7 @@ export function CriteriaStep() {
             id="criteria"
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
-            placeholder="Tell us more about your needs..."
+            placeholder="Tell me more about what you want..."
             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors min-h-[120px]"
             required
           />

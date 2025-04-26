@@ -75,13 +75,19 @@ Help Me Pick simplifies the product selection process through a guided wizard in
 - [x] Implement API rate limiting
 - [x] Optimize API calls and prevent unnecessary refreshes
 
-
 ### Phase 8: Deployment and Launch 🚀
 - [ ] Set up Vercel deployment
 - [ ] Configure production environment variables
 - [ ] Perform security audit
 - [ ] Launch MVP
 
+### Phase 9: Security Hardening 🔒
+- [ ] Replace in-memory rate limiter with Redis or Vercel KV for distributed rate limiting
+- [ ] Add CSRF protection (e.g., same-site cookie checks or CSRF tokens) to all mutating API routes
+- [ ] Remove or guard production `console.*` statements that leak environment variables
+- [ ] Enforce payload size limits and validate request bodies with Zod or a similar validator
+- [ ] Configure secure HTTP headers (CSP, HSTS, X-Frame-Options, Referrer-Policy, etc.) via middleware or Vercel settings
+- [ ] (Optional) Implement a content-moderation pass (e.g., OpenAI moderation API) to sanitize AI outputs before storing or displaying
 
 ### For later
 - [ ] Implement monitoring and logging
@@ -89,7 +95,6 @@ Help Me Pick simplifies the product selection process through a guided wizard in
 - [ ] Write unit tests for core functionality
 - [ ] Perform end-to-end testing
 - [ ] Test cross-browser compatibility
-
 
 ## User Flow
 

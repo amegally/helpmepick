@@ -17,7 +17,7 @@ export default function Home() {
             Help Me Pick
           </h1>
           <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Get personalized product recommendations!
+          Find the best product for you — fast, easy, and personalized!
           </p>
         </motion.div>
       </header>

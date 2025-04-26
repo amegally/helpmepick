@@ -3,7 +3,6 @@ import { ProgressIndicator } from './ProgressIndicator';
 import { CategoryStep } from './CategoryStep';
 import { CriteriaStep } from './CriteriaStep';
 import { RecommendationsStep } from './RecommendationsStep';
-import { ResultsStep } from './ResultsStep';
 import { useWizard } from './WizardContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,8 +17,6 @@ function WizardContent() {
         return <CriteriaStep />;
       case 'recommendations':
         return <RecommendationsStep />;
-      case 'results':
-        return <ResultsStep />;
       default:
         return null;
     }

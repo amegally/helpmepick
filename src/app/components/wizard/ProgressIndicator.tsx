@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-type WizardStep = 'category' | 'criteria' | 'recommendations' | 'results';
+type WizardStep = 'category' | 'criteria' | 'recommendations';
 
 interface ProgressIndicatorProps {
   currentStep: WizardStep;
@@ -9,8 +9,7 @@ interface ProgressIndicatorProps {
 const steps: { step: WizardStep; label: string }[] = [
   { step: 'category', label: 'Category' },
   { step: 'criteria', label: 'Criteria' },
-  { step: 'recommendations', label: 'Recommendations' },
-  { step: 'results', label: 'Results' },
+  { step: 'recommendations', label: 'Clarity' },
 ];
 
 export function ProgressIndicator({ currentStep }: ProgressIndicatorProps) {

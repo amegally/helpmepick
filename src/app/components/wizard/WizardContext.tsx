@@ -39,7 +39,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
 
   const nextStep = () => {
     setState(prev => {
-      const steps: WizardStep[] = ['category', 'criteria', 'recommendations', 'results'];
+      const steps: WizardStep[] = ['category', 'criteria', 'recommendations'];
       const currentIndex = steps.indexOf(prev.currentStep);
       const nextStep = steps[currentIndex + 1] || prev.currentStep;
       return { ...prev, currentStep: nextStep };
@@ -48,7 +48,7 @@ export function WizardProvider({ children }: { children: ReactNode }) {
 
   const previousStep = () => {
     setState(prev => {
-      const steps: WizardStep[] = ['category', 'criteria', 'recommendations', 'results'];
+      const steps: WizardStep[] = ['category', 'criteria', 'recommendations'];
       const currentIndex = steps.indexOf(prev.currentStep);
       const prevStep = steps[currentIndex - 1] || prev.currentStep;
       return { ...prev, currentStep: prevStep };

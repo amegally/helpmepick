@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Help Me Pick - AI-Powered Product Recommendations",
+  title: "Help Me Pick - Find the best product for you — fast, easy, and personalized.",
   description: "Get personalized product recommendations through an interactive wizard experience.",
 };
 

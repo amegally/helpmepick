@@ -51,10 +51,13 @@ const StarRating = ({ rating }: { rating: number }) => {
 };
 
 export function RecommendationsStep() {
-  const { state, previousStep } = useWizard();
+  const { state, previousStep, setCriteria, setRecommendations } = useWizard();
   const [copied, setCopied] = useState(false);
   const [permalink, setPermalink] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [showClarificationForm, setShowClarificationForm] = useState(false);
+  const [additionalCriteria, setAdditionalCriteria] = useState('');
+  const [isRefining, setIsRefining] = useState(false);
 
   const handleSaveAndCopyLink = async () => {
     if (permalink) {
@@ -100,11 +103,44 @@ export function RecommendationsStep() {
     }
   };
 
+  const handleClarification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!additionalCriteria.trim()) return;
+
+    setIsRefining(true);
+    try {
+      const response = await fetch('/api/wizard/recommendations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          category: state.category,
+          criteria: `${state.criteria}\nAdditional criteria: ${additionalCriteria}`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get refined recommendations');
+      }
+
+      const data = await response.json();
+      setCriteria(`${state.criteria}\nAdditional criteria: ${additionalCriteria}`);
+      setRecommendations(data.recommendations);
+      setShowClarificationForm(false);
+      setAdditionalCriteria('');
+    } catch (err) {
+      console.error('Error refining recommendations:', err);
+    } finally {
+      setIsRefining(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          Here are your recommendations
+          Here are your top recommendations
         </h2>
         <p className="text-gray-600">
           Based on your preferences, we think these would be perfect for you.
@@ -112,7 +148,7 @@ export function RecommendationsStep() {
       </div>
 
       <div className="grid gap-6">
-        {state.recommendations.map((product, index) => (
+        {state.recommendations.slice(0, 3).map((product, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
@@ -155,6 +191,49 @@ export function RecommendationsStep() {
             </div>
           </motion.div>
         ))}
+      </div>
+
+      <div className="mt-8 border-t pt-6">
+        {!showClarificationForm ? (
+          <button
+            onClick={() => setShowClarificationForm(true)}
+            className="w-full text-center text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Want more specific recommendations? Click here to refine your criteria
+          </button>
+        ) : (
+          <form onSubmit={handleClarification} className="space-y-4">
+            <div>
+              <label htmlFor="additionalCriteria" className="block text-sm font-medium text-gray-700 mb-2">
+                What additional details would help us find better recommendations?
+              </label>
+              <textarea
+                id="additionalCriteria"
+                value={additionalCriteria}
+                onChange={(e) => setAdditionalCriteria(e.target.value)}
+                placeholder="e.g., I prefer products with longer battery life, or I need something more compact..."
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors min-h-[100px]"
+                required
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowClarificationForm(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isRefining}
+                className="flex-1 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {isRefining ? 'Refining...' : 'Get Refined Results'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
       <div className="flex justify-center space-x-4 mt-8">

@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen bg-white dark:bg-black relative flex flex-col`}>
         <div className="absolute inset-0 bottom-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-100/30 via-transparent to-transparent dark:from-purple-900/10" />
         <div className="relative flex-grow z-1">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-16">
             <main className="max-w-4xl mx-auto">
               <DebugEnv />
               <WizardProvider>

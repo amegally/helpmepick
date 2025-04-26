@@ -137,17 +137,17 @@ export function RecommendationsStep() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1 sm:mb-2">
           Here are your top recommendations
         </h2>
-        <p className="text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600">
           Based on your preferences, we think these would be perfect for you.
         </p>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4 sm:gap-6">
         {state.recommendations.slice(0, 3).map((product, index) => (
           <motion.div
             key={index}

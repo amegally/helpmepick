@@ -20,7 +20,7 @@ async function testValidation() {
     };
     categorySchema.parse(longCategory);
     console.error('❌ Long category validation failed to catch overflow');
-  } catch (error) {
+  } catch (_error) {
     console.log('✅ Long category correctly rejected');
   }
 
@@ -40,7 +40,7 @@ async function testValidation() {
     };
     criteriaSchema.parse(longCriteria);
     console.error('❌ Long criteria validation failed to catch overflow');
-  } catch (error) {
+  } catch (_error) {
     console.log('✅ Long criteria correctly rejected');
   }
 }

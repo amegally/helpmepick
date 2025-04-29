@@ -84,6 +84,7 @@ export function CriteriaStep() {
         body: JSON.stringify({
           category: state.category,
           criteria: answer.trim(),
+          originalInput: state.originalInput
         }),
       });
 

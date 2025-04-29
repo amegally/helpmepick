@@ -60,16 +60,27 @@ interface OpenAIResponse {
 
 export async function generateRecommendations(
   category: string,
-  criteria: string
+  criteria: string,
+  originalInput?: string
 ): Promise<ProductRecommendation[]> {
-  const prompt = `Recommend 5 ${category} products based on: "${criteria}".
+  const prompt = `Generate product recommendations based on the following user request:
+
+Initial Request: "${originalInput || category}"
+Product Category: "${category}"
+Additional Criteria: "${criteria}"
+
+Return 5 specific product recommendations from amazon.com that best match ALL of the following:
+1. The user's initial request and intent
+2. The specific criteria provided
+3. The product category requirements
+
 Return JSON only:
 {
   "recommendations": [
     {
       "name": "Brief product name",
       "description": "2-3 key features",
-      "explanation": "Why it matches criteria",
+      "explanation": "Why this matches both the initial request and additional criteria",
       "price": "$XX.XX",
       "rating": 4.5,
       "personalNote": "A natural sounding response explaining why this would be perfect for the user. Don't use the word 'I'. Vary the beginning of the sentence to avoid repetition."
@@ -82,7 +93,7 @@ Return JSON only:
     messages: [
       {
         role: "system",
-        content: "You are a friendly product recommendation expert. Be concise yet conversational. Focus on real, current products with realistic prices. Make your personal notes sound like a recommendation from a knowledgeable friend but don't use the word 'I'."
+        content: "You are a friendly product recommendation expert. Be concise yet conversational. Focus on real, current products with realistic prices. Make your personal notes sound like a recommendation from a knowledgeable friend but don't use the word 'I'. Consider both the user's initial request and their additional criteria when making recommendations."
       },
       {
         role: "user",

@@ -12,14 +12,24 @@ export function CriteriaStep() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     async function fetchQuestion() {
       try {
+        setLoading(true);
+        setError(null);
+
         const response = await fetch('/api/wizard/question', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ category: state.category }),
+          body: JSON.stringify({ 
+            category: state.category,
+            originalInput: state.originalInput 
+          }),
+          signal: controller.signal
         });
 
         if (!response.ok) {
@@ -27,17 +37,34 @@ export function CriteriaStep() {
         }
 
         const data = await response.json();
-        setQuestion(data.question);
+        if (isMounted) {
+          setQuestion(data.question);
+        }
       } catch (err) {
+        if (err.name === 'AbortError') {
+          return;
+        }
         console.error('Error fetching question:', err);
-        setError('Failed to load question. Please try again.');
+        if (isMounted) {
+          setError('Failed to load question. Please try again.');
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
-    fetchQuestion();
-  }, [state.category]);
+    // Only fetch if we have both category and originalInput
+    if (state.category && state.originalInput) {
+      fetchQuestion();
+    }
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [state.category]); // Only depend on category since originalInput will always change with it
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

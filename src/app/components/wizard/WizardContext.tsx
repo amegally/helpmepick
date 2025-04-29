@@ -5,7 +5,7 @@ import { WizardState, ProductRecommendation, WizardStep } from '@/types/wizard';
 
 interface WizardContextType {
   state: WizardState;
-  setCategory: (category: string) => void;
+  setCategory: (category: string, originalInput?: string) => void;
   setCriteria: (criteria: string) => void;
   setRecommendations: (recommendations: ProductRecommendation[]) => void;
   nextStep: () => void;
@@ -16,6 +16,7 @@ interface WizardContextType {
 const initialState: WizardState = {
   currentStep: 'category',
   category: '',
+  originalInput: '',
   criteria: '',
   recommendations: [],
 };
@@ -25,8 +26,12 @@ const WizardContext = createContext<WizardContextType | undefined>(undefined);
 export function WizardProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<WizardState>(initialState);
 
-  const setCategory = (category: string) => {
-    setState(prev => ({ ...prev, category }));
+  const setCategory = (category: string, originalInput?: string) => {
+    setState(prev => ({ 
+      ...prev, 
+      category,
+      originalInput: originalInput || category
+    }));
   };
 
   const setCriteria = (criteria: string) => {

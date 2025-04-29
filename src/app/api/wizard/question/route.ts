@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     // Get the rate limit info
     const rateLimit = rateLimitResult || { limit: 10, remaining: 9, reset: Date.now() + 60000 };
 
-    const { category } = await request.json();
+    const { category, originalInput } = await request.json();
 
     if (!category) {
       return NextResponse.json(
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const question = await generateFollowUpQuestion(category);
+    const question = await generateFollowUpQuestion(category, originalInput);
     
     // Return the response with rate limit headers
     return NextResponse.json(
